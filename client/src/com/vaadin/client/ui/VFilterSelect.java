@@ -30,6 +30,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -717,6 +718,18 @@ public class VFilterSelect extends Composite
             menu.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
 
             if (BrowserInfo.get().isIE()
+                    && BrowserInfo.get().getBrowserMajorVersion() < 10) {
+                if (suggestionPopupWidth == null) {
+                    setTdWidth(menu.getElement(), naturalMenuWidth);
+                } else {
+                    int compensation = 8;
+                    setTdWidth(menu.getElement(),
+                            menu.getOffsetWidth() - compensation);
+                }
+
+            }
+
+            if (BrowserInfo.get().isIE()
                     && BrowserInfo.get().getBrowserMajorVersion() < 11) {
                 // Must take margin,border,padding manually into account for
                 // menu element as we measure the element child and set width to
@@ -773,29 +786,14 @@ public class VFilterSelect extends Composite
 
                 menu.setHeight(menuHeight + "px");
 
-                /**
-                 * Three different width modes for the suggestion pop-up:
-                 * 
-                 * 1. "null"-mode: width is determined by the longest item
-                 * caption for each page while still maintaining minimum width
-                 * of (desiredWidth - popupOuterPadding)
-                 * 
-                 * 2. relative to the component itself
-                 * 
-                 * 3. fixed width
-                 */
                 if (suggestionPopupWidth == null) {
                     final int naturalMenuWidthPlusScrollBar = naturalMenuWidth
                             + WidgetUtil.getNativeScrollbarSize();
                     if (offsetWidth < naturalMenuWidthPlusScrollBar) {
                         menu.setWidth(naturalMenuWidthPlusScrollBar + "px");
                     }
-                } else if (isrelativeUnits(suggestionPopupWidth)) {
-                    tableStyle.setProperty("width", "calc(100% - "
-                            + WidgetUtil.getNativeScrollbarSize() + "px)");
                 } else {
-                    tableStyle.setProperty("width", "calc(100% - "
-                            + WidgetUtil.getNativeScrollbarSize() + "px)");
+                    tableStyle.setProperty("width", "100%");
                 }
 
                 tableStyle.setOverflowY(Style.Overflow.AUTO);
@@ -808,11 +806,32 @@ public class VFilterSelect extends Composite
                 if (left < 0) {
                     left = 0;
                     menu.setWidth(Window.getClientWidth() + "px");
+
+                }
+                if (BrowserInfo.get().isIE()
+                        && BrowserInfo.get().getBrowserMajorVersion() < 10) {
+                    setTdWidth(menu.getElement(), Window.getClientWidth() - 8);
                 }
             }
 
             setPopupPosition(left, top);
             menu.scrollSelectionIntoView();
+        }
+
+        /**
+         * @since
+         * @param i
+         */
+        private void setTdWidth(Node parent, int width) {
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                Node child = parent.getChild(i);
+                if ("td".equals(child.getNodeName().toLowerCase())) {
+                    ((Element) child).getStyle().setWidth(width, Unit.PX);
+                } else {
+                    setTdWidth(child, width);
+                }
+
+            }
         }
 
         /**
@@ -969,6 +988,32 @@ public class VFilterSelect extends Composite
             while (it.hasNext()) {
                 final FilterSelectSuggestion s = it.next();
                 final MenuItem mi = new MenuItem(s.getDisplayString(), true, s);
+
+                // if (suggestionPopupWidth == null) {
+                // if (naturalMenuWidth < desiredWidth) {
+                // menu.setWidth((desiredWidth - popupOuterPadding) + "px");
+                // tableStyle.setWidth(100, Unit.PCT);
+                // }
+                // } else if (isrelativeUnits(suggestionPopupWidth)) {
+                // float mainComponentWidth = desiredWidth - popupOuterPadding;
+                // // convert percentage value to fraction
+                // int width = Math.round(
+                // mainComponentWidth * asFraction(suggestionPopupWidth));
+                // menu.setWidth(width + "px");
+                // tableStyle.setWidth(100, Unit.PCT);
+                // } else {
+                // // set as fixed width
+                // menu.setWidth(WidgetUtil.escapeAttribute(suggestionPopupWidth));
+                // tableStyle.setWidth(100, Unit.PCT);
+                // }
+                // if (BrowserInfo.get().isIE()
+                // && BrowserInfo.get().getBrowserMajorVersion() < 10
+                // && suggestionPopupWidth != null) {
+                //
+                // Window.alert("w" + getElement().getClientWidth());
+                // String w = (getElement().getClientWidth() - 20) + "px";
+                // mi.getElement().getStyle().setProperty("width", w);
+                // }
                 String style = s.getStyle();
                 if (style != null) {
                     mi.addStyleName("v-filterselect-item-" + style);
