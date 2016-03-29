@@ -34,6 +34,13 @@ public class ComboBoxSuggestionPopupWidth extends AbstractTestUI {
         cb3.setPopupWidth("300px");
         addComponent(cb3);
 
+        ComboBox cb4 = new ComboBox(
+                "200px wide ComboBox with legacy mode suggestion popup setPopupWidth(null)",
+                items);
+        cb4.setWidth("200px");
+        cb4.setPopupWidth(null);
+        addComponent(cb4);
+
     }
 
     @Override

@@ -358,17 +358,15 @@
 
   [class$="suggestmenu"] {
     @include valo-selection-overlay-style($animate-in: false, $animate-out: false);
-    @include box-sizing(border-box);
+    @include box-sizing(content-box);
     position: relative;
     z-index: 1;
-
-    &[style*="height"] {
-      @include box-sizing(content-box);
-    }
   }
 
    margin-top: ceil($v-unit-size/8) !important;
-
+  table {
+    height: 100%;
+  }
   table,
   tbody,
   tr,
@@ -378,6 +376,14 @@
 
   .gwt-MenuItem {
     @include valo-selection-item-style;
+    height: $v-selection-item-height;
+
+    > span {
+      text-overflow: ellipsis;
+      width: 100%;
+      display: inline-block;
+      overflow-x: hidden;
+    }
   }
 
   .gwt-MenuItem-selected {

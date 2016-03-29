@@ -678,13 +678,27 @@ public class VFilterSelect extends Composite
 
             if (popupOuterPadding == -1) {
                 popupOuterPadding = WidgetUtil
-                        .measureHorizontalPaddingAndBorder(getElement(), 2);
+                        .measureHorizontalPaddingAndBorder(menu.getElement(),
+                                2);
             }
 
+            Style tableStyle = menuFirstChild.getStyle();
+
+            /**
+             * Three different width modes for the suggestion pop-up:
+             * 
+             * 1. "null"-mode: width is determined by the longest item caption
+             * for each page while still maintaining minimum width of
+             * (desiredWidth - popupOuterPadding)
+             * 
+             * 2. relative to the component itself
+             * 
+             * 3. fixed width
+             */
             if (suggestionPopupWidth == null) {
                 if (naturalMenuWidth < desiredWidth) {
                     menu.setWidth((desiredWidth - popupOuterPadding) + "px");
-                    menuFirstChild.getStyle().setWidth(100, Unit.PCT);
+                    tableStyle.setWidth(100, Unit.PCT);
                 }
             } else if (isrelativeUnits(suggestionPopupWidth)) {
                 float mainComponentWidth = desiredWidth - popupOuterPadding;
@@ -692,13 +706,15 @@ public class VFilterSelect extends Composite
                 int width = Math.round(
                         mainComponentWidth * asFraction(suggestionPopupWidth));
                 menu.setWidth(width + "px");
-                menuFirstChild.getStyle().setWidth(100, Unit.PCT);
+                tableStyle.setWidth(100, Unit.PCT);
             } else {
                 // set as fixed width
-                // TODO put through HTML safe utils
-                menu.setWidth(suggestionPopupWidth);
-                menuFirstChild.getStyle().setWidth(100, Unit.PCT);
+                menu.setWidth(WidgetUtil.escapeAttribute(suggestionPopupWidth));
+                tableStyle.setWidth(100, Unit.PCT);
             }
+            tableStyle.setOverflowY(Style.Overflow.HIDDEN);
+            // TODO menu's overflow should not be set to auto to beging with
+            menu.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
 
             if (BrowserInfo.get().isIE()
                     && BrowserInfo.get().getBrowserMajorVersion() < 11) {
@@ -757,11 +773,33 @@ public class VFilterSelect extends Composite
 
                 menu.setHeight(menuHeight + "px");
 
-                final int naturalMenuWidthPlusScrollBar = naturalMenuWidth
-                        + WidgetUtil.getNativeScrollbarSize();
-                if (offsetWidth < naturalMenuWidthPlusScrollBar) {
-                    menu.setWidth(naturalMenuWidthPlusScrollBar + "px");
+                /**
+                 * Three different width modes for the suggestion pop-up:
+                 * 
+                 * 1. "null"-mode: width is determined by the longest item
+                 * caption for each page while still maintaining minimum width
+                 * of (desiredWidth - popupOuterPadding)
+                 * 
+                 * 2. relative to the component itself
+                 * 
+                 * 3. fixed width
+                 */
+                if (suggestionPopupWidth == null) {
+                    final int naturalMenuWidthPlusScrollBar = naturalMenuWidth
+                            + WidgetUtil.getNativeScrollbarSize();
+                    if (offsetWidth < naturalMenuWidthPlusScrollBar) {
+                        menu.setWidth(naturalMenuWidthPlusScrollBar + "px");
+                    }
+                } else if (isrelativeUnits(suggestionPopupWidth)) {
+                    tableStyle.setProperty("width", "calc(100% - "
+                            + WidgetUtil.getNativeScrollbarSize() + "px)");
+                } else {
+                    tableStyle.setProperty("width", "calc(100% - "
+                            + WidgetUtil.getNativeScrollbarSize() + "px)");
                 }
+
+                tableStyle.setOverflowY(Style.Overflow.AUTO);
+
             }
 
             if (offsetWidth + left > Window.getClientWidth()) {
@@ -778,11 +816,13 @@ public class VFilterSelect extends Composite
         }
 
         /**
+         * Returns the percentage value as a fraction, e.g. 42% -> 0.42
+         * 
          * @since
-         * @param suggestionPopupWidth
+         * @param percentage
          */
-        private float asFraction(String suggestionPopupWidth) {
-            String trimmed = suggestionPopupWidth.trim();
+        private float asFraction(String percentage) {
+            String trimmed = percentage.trim();
             String withoutPercentSign = trimmed.substring(0,
                     trimmed.length() - 1);
             float asFraction = Float.parseFloat(withoutPercentSign) / 100;

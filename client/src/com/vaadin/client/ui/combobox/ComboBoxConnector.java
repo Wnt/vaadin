@@ -98,8 +98,10 @@ public class ComboBoxConnector extends AbstractFieldConnector
             getWidget().inputPrompt = "";
         }
 
-        String suggestionPopupWidth = uidl
-                .getStringAttribute("suggestionPopupWidth");
+        String suggestionPopupWidth = null;
+        if (uidl.hasAttribute("suggestionPopupWidth")) {
+            uidl.getStringAttribute("suggestionPopupWidth");
+        }
         getWidget().suggestionPopupWidth = suggestionPopupWidth;
 
         getWidget().suggestionPopup.updateStyleNames(uidl, getState());

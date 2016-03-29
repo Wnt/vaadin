@@ -232,7 +232,10 @@ public class ComboBox extends AbstractSelect
 
             target.addAttribute("pagelength", pageLength);
 
-            target.addAttribute("suggestionPopupWidth", suggestionPopupWidth);
+            if (suggestionPopupWidth != null) {
+                target.addAttribute("suggestionPopupWidth",
+                        suggestionPopupWidth);
+            }
 
             target.addAttribute("filteringmode", getFilteringMode().toString());
 
