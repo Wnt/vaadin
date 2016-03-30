@@ -91,10 +91,10 @@ import com.vaadin.shared.util.SharedUtil;
  * TODO needs major refactoring (to be extensible etc)
  */
 @SuppressWarnings("deprecation")
-public class VFilterSelect extends Composite
-        implements Field, KeyDownHandler, KeyUpHandler, ClickHandler,
-        FocusHandler, BlurHandler, Focusable, SubPartAware, HandlesAriaCaption,
-        HandlesAriaInvalid, HandlesAriaRequired, DeferredWorker {
+public class VFilterSelect extends Composite implements Field, KeyDownHandler,
+        KeyUpHandler, ClickHandler, FocusHandler, BlurHandler, Focusable,
+        SubPartAware, HandlesAriaCaption, HandlesAriaInvalid,
+        HandlesAriaRequired, DeferredWorker {
 
     /**
      * Represents a suggestion in the suggestion popup box
@@ -131,8 +131,8 @@ public class VFilterSelect extends Composite
         @Override
         public String getDisplayString() {
             final StringBuffer sb = new StringBuffer();
-            final Icon icon = client
-                    .getIcon(client.translateVaadinUri(untranslatedIconUri));
+            final Icon icon = client.getIcon(client
+                    .translateVaadinUri(untranslatedIconUri));
             if (icon != null) {
                 sb.append(icon.getElement().getString());
             }
@@ -241,7 +241,7 @@ public class VFilterSelect extends Composite
                 if (isNaN(deltaY)) {
                     deltaY = -0.5*e.wheelDelta;
                 }
-        
+
                 @com.vaadin.client.ui.VFilterSelect.JsniUtil::moveScrollFromEvent(*)(widget, deltaX, deltaY, e);
             });
         }-*/;
@@ -270,8 +270,8 @@ public class VFilterSelect extends Composite
      * Represents the popup box with the selection options. Wraps a suggestion
      * menu.
      */
-    public class SuggestionPopup extends VOverlay
-            implements PositionCallback, CloseHandler<PopupPanel> {
+    public class SuggestionPopup extends VOverlay implements PositionCallback,
+            CloseHandler<PopupPanel> {
 
         private static final int Z_INDEX = 30000;
 
@@ -386,7 +386,9 @@ public class VFilterSelect extends Composite
                     boolean firstPage = (currentPage == 0);
                     final int first = currentPage * pageLength + 1
                             - (firstPage ? 0 : nullOffset);
-                    final int last = first + currentSuggestions.size() - 1
+                    final int last = first
+                            + currentSuggestions.size()
+                            - 1
                             - (firstPage && "".equals(lastFilter) ? nullOffset
                                     : 0);
                     final int matches = totalSuggestions - nullOffset;
@@ -418,8 +420,7 @@ public class VFilterSelect extends Composite
                     // box-shadow.
                     // IE9 and IE10 need explicit update to remove extra
                     // box-shadows
-                    if (BrowserInfo.get().isIE9()
-                            || BrowserInfo.get().isIE10()) {
+                    if (BrowserInfo.get().isIE9() || BrowserInfo.get().isIE10()) {
                         forceReflow();
                     }
                 }
@@ -437,8 +438,8 @@ public class VFilterSelect extends Composite
             }
             if (active) {
                 DOM.sinkEvents(down, Event.ONCLICK);
-                down.setClassName(
-                        VFilterSelect.this.getStylePrimaryName() + "-nextpage");
+                down.setClassName(VFilterSelect.this.getStylePrimaryName()
+                        + "-nextpage");
             } else {
                 DOM.sinkEvents(down, 0);
                 down.setClassName(VFilterSelect.this.getStylePrimaryName()
@@ -458,8 +459,8 @@ public class VFilterSelect extends Composite
 
             if (active) {
                 DOM.sinkEvents(up, Event.ONCLICK);
-                up.setClassName(
-                        VFilterSelect.this.getStylePrimaryName() + "-prevpage");
+                up.setClassName(VFilterSelect.this.getStylePrimaryName()
+                        + "-prevpage");
             } else {
                 DOM.sinkEvents(up, 0);
                 up.setClassName(VFilterSelect.this.getStylePrimaryName()
@@ -679,8 +680,7 @@ public class VFilterSelect extends Composite
 
             if (popupOuterPadding == -1) {
                 popupOuterPadding = WidgetUtil
-                        .measureHorizontalPaddingAndBorder(menu.getElement(),
-                                2);
+                        .measureHorizontalPaddingAndBorder(menu.getElement(), 2);
             }
 
             Style tableStyle = menuFirstChild.getStyle();
@@ -728,8 +728,7 @@ public class VFilterSelect extends Composite
                     menuHeight -= up.getOffsetHeight() + down.getOffsetHeight()
                             + status.getOffsetHeight();
                 } else {
-                    final ComputedStyle s = new ComputedStyle(
-                            menu.getElement());
+                    final ComputedStyle s = new ComputedStyle(menu.getElement());
                     menuHeight -= s.getIntProperty("marginBottom")
                             + s.getIntProperty("marginTop");
                 }
@@ -750,7 +749,6 @@ public class VFilterSelect extends Composite
                         menu.setWidth(naturalMenuWidthPlusScrollBar + "px");
                     }
                 }
-
             }
 
             if (offsetWidth + left > Window.getClientWidth()) {
@@ -799,8 +797,8 @@ public class VFilterSelect extends Composite
             } else if (isrelativeUnits(suggestionPopupWidth)) {
                 float mainComponentWidth = desiredWidth - popupOuterPadding;
                 // convert percentage value to fraction
-                int widthInPx = Math.round(
-                        mainComponentWidth * asFraction(suggestionPopupWidth));
+                int widthInPx = Math.round(mainComponentWidth
+                        * asFraction(suggestionPopupWidth));
                 width = widthInPx + "px";
             } else {
                 // use as fixed width CSS definition
@@ -818,8 +816,8 @@ public class VFilterSelect extends Composite
                     setTdWidth(menu.getElement(), naturalMenuWidth);
                 } else {
                     int compensation = 8;
-                    setTdWidth(menu.getElement(),
-                            menu.getOffsetWidth() - compensation);
+                    setTdWidth(menu.getElement(), menu.getOffsetWidth()
+                            - compensation);
                 }
 
             }
@@ -907,12 +905,12 @@ public class VFilterSelect extends Composite
         public void updateStyleNames(UIDL uidl,
                 AbstractComponentState componentState) {
             debug("VFS.SP: updateStyleNames()");
-            setStyleName(
-                    VFilterSelect.this.getStylePrimaryName() + "-suggestpopup");
-            menu.setStyleName(
-                    VFilterSelect.this.getStylePrimaryName() + "-suggestmenu");
-            status.setClassName(
-                    VFilterSelect.this.getStylePrimaryName() + "-status");
+            setStyleName(VFilterSelect.this.getStylePrimaryName()
+                    + "-suggestpopup");
+            menu.setStyleName(VFilterSelect.this.getStylePrimaryName()
+                    + "-suggestmenu");
+            status.setClassName(VFilterSelect.this.getStylePrimaryName()
+                    + "-status");
             if (ComponentStateUtil.hasStyles(componentState)) {
                 for (String style : componentState.styles) {
                     if (!"".equals(style)) {
@@ -927,8 +925,8 @@ public class VFilterSelect extends Composite
     /**
      * The menu where the suggestions are rendered
      */
-    public class SuggestionMenu extends MenuBar
-            implements SubPartAware, LoadHandler {
+    public class SuggestionMenu extends MenuBar implements SubPartAware,
+            LoadHandler {
 
         private VLazyExecutor delayedImageLoadExecutioner = new VLazyExecutor(
                 100, new ScheduledCommand() {
@@ -972,8 +970,8 @@ public class VFilterSelect extends Composite
          */
         String getPreferredHeight(int pageItemsCount) {
             if (currentSuggestions.size() > 0) {
-                final int pixels = (getPreferredHeight()
-                        / currentSuggestions.size()) * pageItemsCount;
+                final int pixels = (getPreferredHeight() / currentSuggestions
+                        .size()) * pageItemsCount;
                 return pixels + "px";
             } else {
                 return "";
@@ -998,7 +996,6 @@ public class VFilterSelect extends Composite
             while (it.hasNext()) {
                 final FilterSelectSuggestion s = it.next();
                 final MenuItem mi = new MenuItem(s.getDisplayString(), true, s);
-
                 String style = s.getStyle();
                 if (style != null) {
                     mi.addStyleName("v-filterselect-item-" + style);
@@ -1029,9 +1026,8 @@ public class VFilterSelect extends Composite
                     && BrowserInfo.get().getBrowserMajorVersion() < 10) {
                 // set TD width to a low value so that they won't mandate the
                 // suggestion pop-up width
-                suggestionPopup.setTdWidth(suggestionPopup.menu.getElement(),
-                        1);
-
+                suggestionPopup
+                        .setTdWidth(suggestionPopup.menu.getElement(), 1);
             }
         }
 
@@ -1083,14 +1079,13 @@ public class VFilterSelect extends Composite
             if (p > 0) {
                 for (int i = 0; i < p; i++) {
                     final MenuItem potentialExactMatch = getItems().get(i);
-                    if (potentialExactMatch.getText()
-                            .equals(enteredItemValue)) {
+                    if (potentialExactMatch.getText().equals(enteredItemValue)) {
                         selectItem(potentialExactMatch);
                         // do not send a value change event if null was and
                         // stays selected
                         if (!"".equals(enteredItemValue)
-                                || (selectedOptionKey != null
-                                        && !"".equals(selectedOptionKey))) {
+                                || (selectedOptionKey != null && !""
+                                        .equals(selectedOptionKey))) {
                             doItemAction(potentialExactMatch, true);
                         }
                         suggestionPopup.hide();
@@ -1109,12 +1104,13 @@ public class VFilterSelect extends Composite
                             enteredItemValue, immediate);
                     afterUpdateClientVariables();
                 }
-            } else if (item != null && !"".equals(lastFilter)
-                    && (filteringmode == FilteringMode.CONTAINS
-                            ? item.getText().toLowerCase()
-                                    .contains(lastFilter.toLowerCase())
-                            : item.getText().toLowerCase()
-                                    .startsWith(lastFilter.toLowerCase()))) {
+            } else if (item != null
+                    && !"".equals(lastFilter)
+                    && (filteringmode == FilteringMode.CONTAINS ? item
+                            .getText().toLowerCase()
+                            .contains(lastFilter.toLowerCase()) : item
+                            .getText().toLowerCase()
+                            .startsWith(lastFilter.toLowerCase()))) {
                 doItemAction(item, true);
             } else {
                 // currentSuggestion has key="" for nullselection
@@ -1138,8 +1134,8 @@ public class VFilterSelect extends Composite
         @Override
         public com.google.gwt.user.client.Element getSubPartElement(
                 String subPart) {
-            int index = Integer
-                    .parseInt(subPart.substring(SUBPART_PREFIX.length()));
+            int index = Integer.parseInt(subPart.substring(SUBPART_PREFIX
+                    .length()));
 
             MenuItem item = getItems().get(index);
 
@@ -1205,8 +1201,8 @@ public class VFilterSelect extends Composite
          */
         int getItemOffsetHeight() {
             List<MenuItem> items = getItems();
-            return items != null && items.size() > 0
-                    ? items.get(0).getOffsetHeight() : 0;
+            return items != null && items.size() > 0 ? items.get(0)
+                    .getOffsetHeight() : 0;
         }
 
         /*
@@ -1214,8 +1210,8 @@ public class VFilterSelect extends Composite
          */
         int getItemOffsetWidth() {
             List<MenuItem> items = getItems();
-            return items != null && items.size() > 0
-                    ? items.get(0).getOffsetWidth() : 0;
+            return items != null && items.size() > 0 ? items.get(0)
+                    .getOffsetWidth() : 0;
         }
 
         /**
@@ -1231,8 +1227,8 @@ public class VFilterSelect extends Composite
             String height = getElement().getStyle().getHeight();
             String preferredHeight = getPreferredHeight(pageLength);
 
-            return !(height == null || height.length() == 0
-                    || height.equals(preferredHeight));
+            return !(height == null || height.length() == 0 || height
+                    .equals(preferredHeight));
         }
 
     }
@@ -1484,8 +1480,8 @@ public class VFilterSelect extends Composite
         suggestionPopup = createSuggestionPopup();
 
         popupOpener.sinkEvents(Event.ONMOUSEDOWN);
-        Roles.getButtonRole().setAriaHiddenState(popupOpener.getElement(),
-                true);
+        Roles.getButtonRole()
+                .setAriaHiddenState(popupOpener.getElement(), true);
         Roles.getButtonRole().set(popupOpener.getElement());
 
         panel.add(tb);
@@ -1634,8 +1630,8 @@ public class VFilterSelect extends Composite
 
         if (filter.equals(lastFilter) && currentPage == page) {
             if (!suggestionPopup.isAttached()) {
-                suggestionPopup.showSuggestions(currentSuggestions, currentPage,
-                        totalMatches);
+                suggestionPopup.showSuggestions(currentSuggestions,
+                        currentPage, totalMatches);
             }
             return;
         }
@@ -1772,8 +1768,7 @@ public class VFilterSelect extends Composite
         }
         setSelectedItemIcon(suggestion.getIconUri());
 
-        if (!(newKey.equals(selectedOptionKey)
-                || ("".equals(newKey) && selectedOptionKey == null))) {
+        if (!(newKey.equals(selectedOptionKey) || ("".equals(newKey) && selectedOptionKey == null))) {
             selectedOptionKey = newKey;
             client.updateVariable(paintableId, "selected",
                     new String[] { selectedOptionKey }, immediate);
@@ -1845,8 +1840,8 @@ public class VFilterSelect extends Composite
 
         int iconHeight = WidgetUtil.getRequiredHeight(selectedItemIcon);
         int marginTop = (availableHeight - iconHeight) / 2;
-        selectedItemIcon.getElement().getStyle().setMarginTop(marginTop,
-                Unit.PX);
+        selectedItemIcon.getElement().getStyle()
+                .setMarginTop(marginTop, Unit.PX);
     }
 
     private static Set<Integer> navigationKeyCodes = new HashSet<Integer>();
@@ -1882,7 +1877,8 @@ public class VFilterSelect extends Composite
                  * items, wrongly interpreted responses and more.
                  */
                 if (enableDebug) {
-                    debug("Ignoring " + keyCode
+                    debug("Ignoring "
+                            + keyCode
                             + " because we are waiting for a filtering response");
                 }
                 DOM.eventPreventDefault(DOM.eventGetCurrentEvent());
@@ -1940,8 +1936,9 @@ public class VFilterSelect extends Composite
                 return;
             }
 
-            if (currentSuggestion != null && tb.getText()
-                    .equals(currentSuggestion.getReplacementString())) {
+            if (currentSuggestion != null
+                    && tb.getText().equals(
+                            currentSuggestion.getReplacementString())) {
                 // Retain behavior from #6686 by returning without stopping
                 // propagation if there's nothing to do
                 return;
@@ -2108,8 +2105,9 @@ public class VFilterSelect extends Composite
     @Override
     public void onClick(ClickEvent event) {
         debug("VFS: onClick()");
-        if (textInputEnabled && event.getNativeEvent().getEventTarget()
-                .cast() == tb.getElement()) {
+        if (textInputEnabled
+                && event.getNativeEvent().getEventTarget().cast() == tb
+                        .getElement()) {
             // Don't process clicks on the text field if text input is enabled
             return;
         }
@@ -2221,10 +2219,10 @@ public class VFilterSelect extends Composite
             afterUpdateClientVariables();
         }
 
-        ComponentConnector connector = ConnectorMap.get(client)
-                .getConnector(this);
-        client.getVTooltip()
-                .showAssistive(connector.getTooltipInfo(getElement()));
+        ComponentConnector connector = ConnectorMap.get(client).getConnector(
+                this);
+        client.getVTooltip().showAssistive(
+                connector.getTooltipInfo(getElement()));
     }
 
     /**
@@ -2257,8 +2255,9 @@ public class VFilterSelect extends Composite
             preventNextBlurEventInIE = false;
 
             Element focusedElement = WidgetUtil.getFocusedElement();
-            if (getElement().isOrHasChild(focusedElement) || suggestionPopup
-                    .getElement().isOrHasChild(focusedElement)) {
+            if (getElement().isOrHasChild(focusedElement)
+                    || suggestionPopup.getElement()
+                            .isOrHasChild(focusedElement)) {
 
                 // IF the suggestion popup or another part of the VFilterSelect
                 // was focused, move the focus back to the textfield and prevent
@@ -2308,8 +2307,8 @@ public class VFilterSelect extends Composite
      * For internal use only. May be removed or replaced in the future.
      */
     public void updateRootWidth() {
-        ComponentConnector paintable = ConnectorMap.get(client)
-                .getConnector(this);
+        ComponentConnector paintable = ConnectorMap.get(client).getConnector(
+                this);
 
         if (paintable.isUndefinedWidth()) {
 
@@ -2341,10 +2340,10 @@ public class VFilterSelect extends Composite
 
                 // Use util.getRequiredWidth instead of getOffsetWidth here
 
-                int iconWidth = selectedItemIcon == null ? 0
-                        : WidgetUtil.getRequiredWidth(selectedItemIcon);
-                int buttonWidth = popupOpener == null ? 0
-                        : WidgetUtil.getRequiredWidth(popupOpener);
+                int iconWidth = selectedItemIcon == null ? 0 : WidgetUtil
+                        .getRequiredWidth(selectedItemIcon);
+                int buttonWidth = popupOpener == null ? 0 : WidgetUtil
+                        .getRequiredWidth(popupOpener);
 
                 /*
                  * Instead of setting the width of the wrapper, set the width of
@@ -2362,8 +2361,8 @@ public class VFilterSelect extends Composite
              * locked
              */
             if (!tb.getElement().getStyle().getWidth().endsWith("px")) {
-                int iconWidth = selectedItemIcon == null ? 0
-                        : selectedItemIcon.getOffsetWidth();
+                int iconWidth = selectedItemIcon == null ? 0 : selectedItemIcon
+                        .getOffsetWidth();
                 tb.setWidth((tb.getOffsetWidth() - iconWidth) + "px");
             }
         }
@@ -2422,8 +2421,7 @@ public class VFilterSelect extends Composite
     }
 
     @Override
-    public com.google.gwt.user.client.Element getSubPartElement(
-            String subPart) {
+    public com.google.gwt.user.client.Element getSubPartElement(String subPart) {
         String[] parts = subPart.split("/");
         if ("textbox".equals(parts[0])) {
             return tb.getElement();
@@ -2439,8 +2437,7 @@ public class VFilterSelect extends Composite
     }
 
     @Override
-    public String getSubPartName(
-            com.google.gwt.user.client.Element subElement) {
+    public String getSubPartName(com.google.gwt.user.client.Element subElement) {
         if (tb.getElement().isOrHasChild(subElement)) {
             return "textbox";
         } else if (popupOpener.getElement().isOrHasChild(subElement)) {

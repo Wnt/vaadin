@@ -33,8 +33,8 @@ public class ComboBoxSuggestionPopupWidthTest extends MultiBrowserTest {
     public void suggestionPopupWidthTest() throws Exception {
         openTestURL();
 
-        waitForElementVisible(
-                By.className("ComboBoxSuggestionPopupWidthModes.java"));
+        waitForElementVisible(By
+                .className("ComboBoxSuggestionPopupWidthModes.java"));
 
         WebElement selectTextbox = $(ComboBoxElement.class).first()
                 .findElement(By.vaadin("#textbox"));
