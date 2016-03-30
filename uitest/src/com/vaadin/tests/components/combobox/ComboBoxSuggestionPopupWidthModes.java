@@ -7,7 +7,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.tests.components.AbstractTestUI;
 import com.vaadin.ui.ComboBox;
 
-public class ComboBoxSuggestionPopupWidth extends AbstractTestUI {
+public class ComboBoxSuggestionPopupWidthModes extends AbstractTestUI {
 
     private static List<String> items = Arrays.asList("abc", "cde", "efg",
             "ghi", "ijk", "more items 1", "more items 2", "more items 3",
@@ -16,11 +16,27 @@ public class ComboBoxSuggestionPopupWidth extends AbstractTestUI {
 
     @Override
     protected void setup(VaadinRequest request) {
-        ComboBox cb = new ComboBox(
-                "200px wide ComboBox with default width (100%) suggestion popup",
+        ComboBox percentage = new ComboBox(
+                "200px wide ComboBox with 200% wide suggestion popup", items);
+        percentage.addStyleName("percentage");
+        percentage.setWidth("200px");
+        percentage.setPopupWidth("200%");
+        addComponent(percentage);
+
+        ComboBox pixels = new ComboBox(
+                "200px wide ComboBox with 300px wide suggestion popup", items);
+        percentage.addStyleName("pixels");
+        pixels.setWidth("200px");
+        pixels.setPopupWidth("300px");
+        addComponent(pixels);
+
+        ComboBox legacy = new ComboBox(
+                "200px wide ComboBox with legacy mode suggestion popup setPopupWidth(null)",
                 items);
-        cb.setWidth("200px");
-        addComponent(cb);
+        percentage.addStyleName("legacy");
+        legacy.setWidth("200px");
+        legacy.setPopupWidth(null);
+        addComponent(legacy);
 
     }
 
