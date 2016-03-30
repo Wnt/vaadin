@@ -65,6 +65,10 @@ $select-button-negative-width: -25px;
 .#{$primaryStyleName}.v-readonly .#{$primaryStyleName}-input {
 	background: transparent;
 }
+.#{$primaryStyleName}-suggestpopup table {
+	/* Workaround for useless vertical scrollbars */
+	margin-bottom: 2px;
+}
 .#{$primaryStyleName}-suggestpopup {
 	background: #f6f7f7;
 	border: 1px solid #b6bbbc;
