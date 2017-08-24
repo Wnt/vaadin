@@ -152,7 +152,7 @@ optional spacing).
 [source, java]
 ----
 HorizontalLayout fittingLayout = new HorizontalLayout();
-fittingLayout.setWidth(Sizeable.SIZE_UNDEFINED, 0); // Default
+fittingLayout.setWidth(null); // Default
 fittingLayout.setSpacing(false); // Compact layout
 fittingLayout.addComponent(new Button("Small"));
 fittingLayout.addComponent(new Button("Medium-sized"));
